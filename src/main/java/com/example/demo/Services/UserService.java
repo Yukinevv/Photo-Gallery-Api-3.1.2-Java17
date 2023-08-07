@@ -1,10 +1,11 @@
-package com.example.demo;
+package com.example.demo.Services;
 
+import com.example.demo.Repositories.UserRepository;
+import com.example.demo.Models.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
