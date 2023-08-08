@@ -13,9 +13,12 @@ public class Image {
     private String filename;
     private byte[] data;
 
-    public Image(String filename, byte[] data) {
+    private String login;
+
+    public Image(String filename, byte[] data, String login) {
         this.filename = filename;
         this.data = data;
+        this.login = login;
     }
 }
 
