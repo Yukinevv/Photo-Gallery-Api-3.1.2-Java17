@@ -23,15 +23,16 @@ public class ImageController {
         return imageService.getAllImages();
     }
 
-    @GetMapping("/{login}")
-    public List<Image> fetchAllUserImages(@PathVariable("login") String login) {
-        return imageService.getAllUserImages(login);
+    @GetMapping("/{login}/{category}")
+    public List<Image> fetchAllUserImages(@PathVariable("login") String login, @PathVariable("category") String category) {
+        return imageService.getAllUserImages(login, category);
     }
 
-    @PostMapping("/upload/{login}")
-    public ResponseEntity<Map<String, String>> saveImage(@PathVariable("login") String login, @RequestBody MultipartFile image) {
+    @PostMapping("/upload/{login}/{category}")
+    public ResponseEntity<Map<String, String>> saveImage(@PathVariable("login") String login, @PathVariable String category,
+                                                         @RequestBody MultipartFile image) {
         try {
-            return imageService.saveImage(image.getOriginalFilename(), image.getBytes(), login);
+            return imageService.saveImage(image.getOriginalFilename(), image.getBytes(), login, category);
         } catch (Exception e) {
             System.out.println("Blad: " + e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

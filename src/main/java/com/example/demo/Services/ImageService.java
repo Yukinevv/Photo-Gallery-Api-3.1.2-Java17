@@ -19,13 +19,13 @@ public class ImageService {
         return imageRepository.findAll();
     }
 
-    public List<Image> getAllUserImages(String login) {
-        return imageRepository.findAllByLogin(login);
+    public List<Image> getAllUserImages(String login, String category) {
+        return imageRepository.findAllByLoginAndCategory(login, category);
     }
 
-    public ResponseEntity<Map<String, String>> saveImage(String filename, byte[] data, String login) {
+    public ResponseEntity<Map<String, String>> saveImage(String filename, byte[] data, String login, String category) {
         try {
-            Image image = new Image(filename, data, login);
+            Image image = new Image(filename, data, login, category);
             imageRepository.save(image);
 
             Map<String, String> response = new HashMap<>();

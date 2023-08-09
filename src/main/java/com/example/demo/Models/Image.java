@@ -14,11 +14,13 @@ public class Image {
     private byte[] data;
 
     private String login;
+    private String category;
 
-    public Image(String filename, byte[] data, String login) {
+    public Image(String filename, byte[] data, String login, String category) {
         this.filename = filename;
         this.data = data;
         this.login = login;
+        this.category = category;
     }
 }
 
