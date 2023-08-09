@@ -36,6 +36,15 @@ public class ImageController {
             System.out.println("Blad: " + e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, String>> deleteImage(@PathVariable("id") String id) {
+        return imageService.deleteImage(id);
+    }
+
+    @PutMapping("/editFilename/{id}/{newFilename}")
+    public ResponseEntity<Map<String, String>> editFilename(@PathVariable("id") String id, @PathVariable("newFilename") String newFilename) {
+        return imageService.editFilename(id, newFilename);
     }
 }

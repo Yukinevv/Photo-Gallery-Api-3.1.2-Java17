@@ -7,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -36,6 +34,46 @@ public class ImageService {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             System.out.println("Blad podczas zapisu obrazu do bazy: " + e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Map<String, String>> deleteImage(String id) {
+        try {
+            Optional<Image> image = imageRepository.findById(id);
+            if (image.isPresent()) {
+                imageRepository.delete((image.get()));
+
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Image deleted successfully");
+
+                return ResponseEntity.ok(response);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            System.out.println("Error while deleting Image from database: " + e.getLocalizedMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Map<String, String>> editFilename(String id, String newFilename) {
+        try {
+            Optional<Image> image = imageRepository.findById(id);
+            if (image.isPresent()) {
+                Image _image = image.get();
+                _image.setFilename(newFilename);
+                imageRepository.save(_image);
+
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Image filename changed successfully");
+
+                return ResponseEntity.ok(response);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            System.out.println("Error while changing Image filename: " + e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
