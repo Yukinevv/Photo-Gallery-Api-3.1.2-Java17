@@ -1,5 +1,6 @@
 package com.example.demo.Services;
 
+import com.example.demo.Models.Image;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Models.User;
 import lombok.AllArgsConstructor;
@@ -7,7 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -34,6 +38,34 @@ public class UserService {
             User _user = userRepository.save(new User(user.getLogin(), user.getPassword(), user.getEmail()));
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Map<String, String>> editPassword(String login, String newPassword, String currentPassword) {
+        try {
+            User user = userRepository.findByLogin(login);
+            if (user != null) {
+                boolean correctPassword = currentPassword.equals(user.getPassword());
+                if (correctPassword) {
+                    user.setPassword(newPassword);
+                    userRepository.save(user);
+
+                    Map<String, String> response = new HashMap<>();
+                    response.put("message", "User password changed successfully");
+
+                    return ResponseEntity.ok(response);
+                } else {
+                    Map<String, String> response = new HashMap<>();
+                    response.put("message", "Wrong password");
+
+                    return ResponseEntity.ok(response);
+                }
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            System.out.println("Error while changing User password: " + e.getLocalizedMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
